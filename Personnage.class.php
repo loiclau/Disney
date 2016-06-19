@@ -5,11 +5,20 @@ class Personnage
 {
 
     private $_force;
-
+    private $_localisation;
     private $_experience;
-
     private $_degats;
 
+
+    public function __construct($force, $degats) // Constructeur demandant 2 paramètres
+
+    {
+        echo 'Voici le constructeur !'; // Message s'affichant une fois que tout objet est créé.
+        $this->setForce($force); // Initialisation de la force.
+        $this->setDegats($degats); // Initialisation des dégâts.
+        $this->_experience = 1; // Initialisation de l'expérience à 1.
+
+    }
 
 
     public function frapper(Personnage $persoAFrapper)
@@ -102,7 +111,17 @@ class Personnage
 
 }
 
+    // Mutateur chargé de modifier l'attribut $_degats.
+    public function setDegats($degats)
+    {
+        if (!is_int($degats)) // S'il ne s'agit pas d'un nombre entier.
+        {
+            trigger_error('Le niveau de dégâts d\'un personnage doit être un nombre entier', E_USER_WARNING);
+            return;
+        }
 
+        $this->_degats = $degats;
+    }
 
     // Ceci est la méthode degats() : elle se charge de renvoyer le contenu de l'attribut $_degats.
 
