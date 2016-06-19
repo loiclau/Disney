@@ -1,7 +1,6 @@
 <?php
 
-include('Personnage.class.php');
-
+include('autoload.php');
 
 
 $perso1 = new Personnage(60, 0); // 60 de force, 0 dégât
