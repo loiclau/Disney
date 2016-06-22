@@ -12,20 +12,6 @@ class PersonnagesManager
     public function add(Personnage $perso)
     {
 
-
-        $donnees = [
-            'nom' => 'Vyk12',
-            'forcePerso' => 5,
-            'degats' => 55,
-            'niveau' => 4,
-            'experience' => 20
-
-        ];
-
-
-
-
-
         $q =   $this->_db->prepare('INSERT INTO personnages(nom, forcePerso, degats, niveau, experience) VALUES(:nom, :forcePerso, :degats, :niveau, :experience)');
         $q->bindValue(':nom', $perso->nom(), PDO::PARAM_STR);
         $q->bindValue(':forcePerso', $perso->forcePerso(), PDO::PARAM_INT);
