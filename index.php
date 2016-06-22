@@ -3,5 +3,15 @@
 include('autoload.php');
 
 
-$perso1 = new Personnage(60, 0); // 60 de force, 0 dégât
-$perso2 = new Personnage(100, 10); // 100 de force, 10 dégâts
+$perso = new Personnage([
+    'nom' => 'Victor',
+    'forcePerso' => 5,
+    'degats' => 0,
+    'niveau' => 1,
+    'experience' => 0
+]);
+
+$db = new PDO('mysql:host=localhost;dbname=personnages', 'root', '');
+$manager = new PersonnagesManager($db);
+
+$manager->add($perso);
