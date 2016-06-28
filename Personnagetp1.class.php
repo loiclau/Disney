@@ -1,6 +1,6 @@
 <?php
 
-class Personnagetp1
+class PersonnageTp1
 {
 
     private $_id, $_degats, $_nom;
@@ -34,7 +34,7 @@ class Personnagetp1
 
 
 //action
-    public function frapper(Personnage $perso)
+    public function frapper(PersonnageTp1 $perso)
     {
 
         if ($perso->id() == $this->_id)
@@ -67,6 +67,12 @@ class Personnagetp1
         // Sinon, on se contente de dire que le personnage a bien été frappé.
         return self::PERSONNAGE_FRAPPE;
 
+    }
+
+
+    public function nomValide()
+    {
+        return !empty($this->_nom);
     }
 
 
