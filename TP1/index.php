@@ -7,7 +7,7 @@ session_start(); // On appelle session_start() APRÈS avoir enregistré l'autolo
 if (isset($_GET['deconnexion']))
 {
     session_destroy();
-    header('Location: tp1.php');
+    header('Location: .');
     exit();
 }
 
@@ -16,14 +16,14 @@ if (isset($_SESSION['perso'])) // Si la session perso existe, on restaure l'obje
     $perso = $_SESSION['perso'];
 }
 
-$db = new PDO('mysql:host=localhost;dbname=personnages', 'root', '');
+$db = new PDO('mysql:host=localhost;dbname=ocpoo', 'iamroot', 'iamroot');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // On émet une alerte à chaque fois qu'une requête a échoué.
 
-$manager = new PersonnagesManagerTp1($db);
+$manager = new PersonnagesManager($db);
 
 if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un personnage.
 {
-    $perso = new PersonnageTp1(['nom' => $_POST['nom']]); // On crée un nouveau personnage.
+    $perso = new Personnage(['nom' => $_POST['nom']]); // On crée un nouveau personnage.
 
     if (!$perso->nomValide())
     {
@@ -73,17 +73,17 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
 
             switch ($retour)
             {
-                case PersonnageTp1::CEST_MOI :
+                case Personnage::CEST_MOI :
                     $message = 'Mais... pourquoi voulez-vous vous frapper ???';
                     break;
 
-                case PersonnageTp1::PERSONNAGE_FRAPPE :
+                case Personnage::PERSONNAGE_FRAPPE :
                     $message = 'Le personnage a bien été frappé !';
                     $manager->update($perso);
                     $manager->update($persoAFrapper);
                     break;
 
-                case PersonnageTp1::PERSONNAGE_TUE :
+                case Personnage::PERSONNAGE_TUE :
                     $message = 'Vous avez tué ce personnage !';
                     $manager->update($perso);
                     $manager->delete($persoAFrapper);
@@ -96,8 +96,6 @@ elseif (isset($_GET['frapper'])) // Si on a cliqué sur un personnage pour le fr
     }
 
 }
-
-
 
 ?>
 
