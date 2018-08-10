@@ -19,12 +19,14 @@ class PersonnagesManager
     public function add(Personnage $perso)
     {
         $q = $this->db->prepare('INSERT INTO personnagestp1(nom) VALUES(:nom)');
-        $q->bindValue(':nom', $perso->nom());
+        $q->bindValue(':nom', $perso->getNom());
         $q->execute();
 
         $perso->hydrate([
             'id' => $this->db->lastInsertId(),
             'degats' => 0,
+            'lvl' => 0,
+            'exp' => 0,
         ]);
     }
 
@@ -41,7 +43,7 @@ class PersonnagesManager
      */
     public function delete(Personnage $perso)
     {
-        $this->db->exec('DELETE FROM personnagestp1 WHERE id = ' . $perso->id());
+        $this->db->exec('DELETE FROM personnagestp1 WHERE id = ' . $perso->getId());
     }
 
     /**
@@ -70,14 +72,12 @@ class PersonnagesManager
     public function get($info)
     {
         if (is_int($info)) {
-            $q = $this->db->query('SELECT id, nom, degats FROM personnagestp1 WHERE id = ' . $info);
+            $q = $this->db->query('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE id = ' . $info);
             $donnees = $q->fetch(PDO::FETCH_ASSOC);
-
             return new Personnage($donnees);
         } else {
-            $q = $this->_db->prepare('SELECT id, nom, degats FROM personnagestp1 WHERE nom = :nom');
+            $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE nom = :nom');
             $q->execute([':nom' => $info]);
-
             return new Personnage($q->fetch(PDO::FETCH_ASSOC));
         }
     }
@@ -90,7 +90,7 @@ class PersonnagesManager
     {
         $persos = [];
 
-        $q = $this->db->prepare('SELECT id, nom, degats FROM personnagestp1 WHERE nom <> :nom ORDER BY nom');
+        $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE nom <> :nom ORDER BY nom');
         $q->execute([':nom' => $nom]);
 
         while ($donnees = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -101,14 +101,36 @@ class PersonnagesManager
     }
 
     /**
+     * @param $nom
+     * @return array
+     */
+    public function getAll()
+    {
+        $persos = [];
+        $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 ORDER BY nom');
+        $q->execute();
+        while ($donnees = $q->fetch(PDO::FETCH_ASSOC)) {
+            $persos[] = new Personnage($donnees);
+        }
+
+        return $persos;
+    }
+
+
+
+    /**
      * @param Personnage $perso
      */
     public function update(Personnage $perso)
     {
-        $q = $this->db->prepare('UPDATE personnagestp1 SET degats = :degats WHERE id = :id');
 
-        $q->bindValue(':degats', $perso->degats(), PDO::PARAM_INT);
-        $q->bindValue(':id', $perso->id(), PDO::PARAM_INT);
+        $query = 'UPDATE personnagestp1 SET degats = :degats, lvl = :lvl, exp = :exp WHERE id = :id';
+        $q = $this->db->prepare($query);
+
+        $q->bindValue(':degats', $perso->getDegats(), PDO::PARAM_INT);
+        $q->bindValue(':lvl', $perso->getLvl(), PDO::PARAM_INT);
+        $q->bindValue(':exp', $perso->getExp(), PDO::PARAM_INT);
+        $q->bindValue(':id', $perso->getId(), PDO::PARAM_INT);
 
         $q->execute();
     }

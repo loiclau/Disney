@@ -2,12 +2,14 @@
 
 class Personnage
 {
-
-    private $id, $degats, $nom;
+    private $id, $degats, $nom, $exp, $lvl;
 
     const CEST_MOI = 1;
     const PERSONNAGE_TUE = 2;
     const PERSONNAGE_FRAPPE = 3;
+
+    const EXP_FRAPPE = 25;
+    const EXP_TUE = 100;
 
     public function __construct(array $donnees)
     {
@@ -27,8 +29,6 @@ class Personnage
         }
     }
 
-//action
-
     /**
      * @param Personnage $perso
      * @return int
@@ -36,7 +36,7 @@ class Personnage
     public function frapper(Personnage $perso)
     {
 
-        if ($perso->id() == $this->id) {
+        if ($perso->getId() == $this->id) {
             return self::CEST_MOI;
         }
 
@@ -63,39 +63,22 @@ class Personnage
 
     }
 
-
+    /**
+     * @return bool
+     */
     public function nomValide()
     {
         return !empty($this->nom);
     }
 
-//getter
 
     /**
      * @return mixed
      */
-    public function degats()
+    public function getDegats(): int
     {
-        return $this->degats;
+        return (int)$this->degats;
     }
-
-    /**
-     * @return mixed
-     */
-    public function id()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function nom()
-    {
-        return $this->nom;
-    }
-
-//setter
 
     /**
      * @param $degats
@@ -110,6 +93,55 @@ class Personnage
     }
 
     /**
+     * @return mixed
+     */
+    public function getExp(): int
+    {
+        return (int)$this->exp;
+    }
+
+    /**
+     * @param $exp
+     */
+    public function setExp($exp)
+    {
+        $exp = (int)$exp + (int)$this->exp;
+        if ($exp >= 0 && $exp < 100) {
+            $this->exp = $exp;
+        } else {
+            $this->lvl += 1;
+            $this->exp = $exp - 100;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLvl(): int
+    {
+        return (int)$this->lvl;
+    }
+
+    /**
+     * @param $lvl
+     */
+    public function setLvl($lvl)
+    {
+        $lvl = (int)$lvl;
+        if ($lvl >= 0 && $lvl <= 100) {
+            $this->lvl = $lvl;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId(): int
+    {
+        return (int)$this->id;
+    }
+
+    /**
      * @param $id
      */
     public function setId($id)
@@ -119,6 +151,14 @@ class Personnage
         if ($id > 0) {
             $this->id = $id;
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom(): string
+    {
+        return (string)$this->nom;
     }
 
     /**
