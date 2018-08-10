@@ -20,6 +20,9 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // On émet une aler
 
 $manager = new PersonnagesManager($db);
 
+
+
+
 if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un personnage.
 {
     $perso = new Personnage(['nom' => $_POST['nom']]); // On crée un nouveau personnage.
@@ -92,7 +95,11 @@ if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un p
 
     <?php
     if ((int)$manager->count() > 0) {
-        $basePerso = $manager->getAll();
+        $actualName = '';
+        if(isset($perso)){
+            $actualName = $perso->getNom();
+        }
+        $basePerso = $manager->getList($actualName);
         echo '<ul>';
         foreach ($basePerso as $oldPerso) {
             echo '<li>' . $oldPerso->getNom() . '</li>';

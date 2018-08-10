@@ -86,7 +86,7 @@ class PersonnagesManager
      * @param $nom
      * @return array
      */
-    public function getList($nom)
+    public function getList($nom = '')
     {
         $persos = [];
 
@@ -99,24 +99,6 @@ class PersonnagesManager
 
         return $persos;
     }
-
-    /**
-     * @param $nom
-     * @return array
-     */
-    public function getAll()
-    {
-        $persos = [];
-        $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 ORDER BY nom');
-        $q->execute();
-        while ($donnees = $q->fetch(PDO::FETCH_ASSOC)) {
-            $persos[] = new Personnage($donnees);
-        }
-
-        return $persos;
-    }
-
-
 
     /**
      * @param Personnage $perso
