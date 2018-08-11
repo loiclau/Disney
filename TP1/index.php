@@ -20,9 +20,6 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING); // On émet une aler
 
 $manager = new PersonnagesManager($db);
 
-
-
-
 if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un personnage.
 {
     $perso = new Personnage(['nom' => $_POST['nom']]); // On crée un nouveau personnage.
@@ -59,27 +56,19 @@ if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un p
                 case Personnage::CEST_MOI :
                     $message = 'Mais... pourquoi voulez-vous vous frapper ???';
                     break;
-
                 case Personnage::PERSONNAGE_FRAPPE :
                     $message = 'Le personnage a bien été frappé !';
-                    $perso->setExp(Personnage::EXP_FRAPPE);
                     $manager->update($perso);
                     $manager->update($persoAFrapper);
                     break;
-
                 case Personnage::PERSONNAGE_TUE :
-                    $perso->setExp(Personnage::EXP_TUE);
                     $message = 'Vous avez tué ce personnage !';
                     $manager->update($perso);
                     $manager->delete($persoAFrapper);
                     break;
-
             }
-
         }
-
     }
-
 }
 ?>
 
@@ -96,7 +85,7 @@ if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un p
     <?php
     if ((int)$manager->count() > 0) {
         $actualName = '';
-        if(isset($perso)){
+        if (isset($perso)) {
             $actualName = $perso->getNom();
         }
         $basePerso = $manager->getList($actualName);
@@ -123,6 +112,7 @@ if (isset($_POST['creer']) && isset($_POST['nom'])) // Si on a voulu créer un p
             <legend>Mes informations</legend>
             <p>
                 Nom : <?= htmlspecialchars($perso->getNom()) ?><br/>
+                Force : <?= $perso->getForce() ?><br/>
                 Dégâts : <?= $perso->getDegats() ?><br/>
                 Lvl : <?= $perso->getLvl() ?><br/>
                 Exp : <?= $perso->getExp() ?>

@@ -27,6 +27,7 @@ class PersonnagesManager
             'degats' => 0,
             'lvl' => 0,
             'exp' => 0,
+            'force' => 0,
         ]);
     }
 
@@ -54,12 +55,12 @@ class PersonnagesManager
     {
         if (is_int($info)) // On veut voir si tel personnage ayant pour id $info existe.
         {
-            return (bool)$this->db->query('SELECT COUNT(*) FROM personnagestp1 WHERE id = ' . $info)->fetchColumn();
+            $query = 'SELECT COUNT(*) FROM `personnagestp1` WHERE `id` = ' . $info;
+            return (bool)$this->db->query($query)->fetchColumn();
         }
 
         // Sinon, c'est qu'on veut vérifier que le nom existe ou pas.
-
-        $q = $this->db->prepare('SELECT COUNT(*) FROM personnagestp1 WHERE nom = :nom');
+        $q = $this->db->prepare('SELECT COUNT(*) FROM `personnagestp1` WHERE `nom` = :nom');
         $q->execute([':nom' => $info]);
 
         return (bool)$q->fetchColumn();
@@ -72,11 +73,13 @@ class PersonnagesManager
     public function get($info)
     {
         if (is_int($info)) {
-            $q = $this->db->query('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE id = ' . $info);
+            $query = 'SELECT `id`, `nom`, `degats`, `lvl`, `exp`, `force` FROM `personnagestp1` WHERE `id` = ' . $info;
+            $q = $this->db->query($query);
             $donnees = $q->fetch(PDO::FETCH_ASSOC);
             return new Personnage($donnees);
         } else {
-            $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE nom = :nom');
+            $query = 'SELECT `id`, `nom`, `degats`, `lvl`, `exp`, `force` FROM `personnagestp1` WHERE `nom` = :nom';
+            $q = $this->db->prepare($query);
             $q->execute([':nom' => $info]);
             return new Personnage($q->fetch(PDO::FETCH_ASSOC));
         }
@@ -89,8 +92,8 @@ class PersonnagesManager
     public function getList($nom = '')
     {
         $persos = [];
-
-        $q = $this->db->prepare('SELECT id, nom, degats, lvl, exp FROM personnagestp1 WHERE nom <> :nom ORDER BY nom');
+        $query = 'SELECT `id`, `nom`, `degats`, `lvl`, `exp`, `force` FROM `personnagestp1` WHERE `nom` <> :nom ORDER BY `nom`';
+        $q = $this->db->prepare($query);
         $q->execute([':nom' => $nom]);
 
         while ($donnees = $q->fetch(PDO::FETCH_ASSOC)) {
@@ -106,13 +109,14 @@ class PersonnagesManager
     public function update(Personnage $perso)
     {
 
-        $query = 'UPDATE personnagestp1 SET degats = :degats, lvl = :lvl, exp = :exp WHERE id = :id';
+        $query = 'UPDATE `personnagestp1` SET `degats` = :degats, `lvl` = :lvl, `exp` = :exp, `force` = :force WHERE `id` = :id';
         $q = $this->db->prepare($query);
 
         $q->bindValue(':degats', $perso->getDegats(), PDO::PARAM_INT);
         $q->bindValue(':lvl', $perso->getLvl(), PDO::PARAM_INT);
         $q->bindValue(':exp', $perso->getExp(), PDO::PARAM_INT);
         $q->bindValue(':id', $perso->getId(), PDO::PARAM_INT);
+        $q->bindValue(':force', $perso->getForce(), PDO::PARAM_INT);
 
         $q->execute();
     }

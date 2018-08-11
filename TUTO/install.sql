@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `personnagestp1` (
   `degats` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `lvl` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exp` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `force` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nom` (`nom`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
