@@ -19,6 +19,7 @@ while next_turn:
         except ValueError:
             print('Ce n est pas un nombre')
             pari = -1
+            continue
         if pari > 49 or pari < 0:
             print('Ce n est pas un nombre entre 0 et 49')
 
@@ -30,6 +31,7 @@ while next_turn:
         except ValueError:
             print('Ce n est pas un nombre')
             mise = -1
+            continue
         if mise > money:
             print('Vous n\'avez pas assé d\'argent')
         elif mise < 0:
