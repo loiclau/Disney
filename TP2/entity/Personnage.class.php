@@ -10,6 +10,7 @@ abstract class Personnage
     const PERSONNAGE_ENSORCELE = 4;
     const PAS_DE_MAGIE = 5;
     const PERSO_ENDORMI = 6;
+    const ESQUIVE_REUSSI = 25;
 
     const EXP_FRAPPE = 10;
     const EXP_TUE = 50;
@@ -69,6 +70,8 @@ abstract class Personnage
                 $exp = self::EXP_TUE * $perso->getLvl();
             }
             $result = self::PERSONNAGE_TUE;
+        } elseif ($perso->recevoirDegats($totalDegats) == self::ESQUIVE_REUSSI) {
+            $result = self::ESQUIVE_REUSSI;
         } else {
             $exp = self::EXP_FRAPPE;
             $result = self::PERSONNAGE_FRAPPE;
@@ -118,6 +121,7 @@ abstract class Personnage
     {
         $this->lvl += 1;
         $this->force += 1;
+        $this->atout += 1;
     }
 
     /**
@@ -148,6 +152,25 @@ abstract class Personnage
 
         if ($atout >= 0 && $atout <= 100) {
             $this->atout = $atout;
+        }
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param $type
+     */
+    public function setType($type)
+    {
+        if (is_string($type)) {
+            $this->type = $type;
         }
     }
 
